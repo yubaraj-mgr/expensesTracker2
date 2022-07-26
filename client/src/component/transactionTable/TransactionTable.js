@@ -2,6 +2,15 @@ import React from "react";
 import Table from "react-bootstrap/Table";
 
 const TransactionTable = ({ transactions }) => {
+  let totalIncome = 0;
+  let totalExpenses = 0;
+  transactions.forEach((transaction) => {
+    const amount = parseInt(transaction.amount);
+    transaction.type === "income"
+      ? (totalIncome += amount)
+      : (totalExpenses += amount);
+  });
+  const balance = totalIncome - totalExpenses;
   return (
     <>
       <Table className="mt-4" striped bordered hover>
@@ -18,7 +27,7 @@ const TransactionTable = ({ transactions }) => {
               <>
                 <tr>
                   <td>{transaction.title}</td>
-                  <td className="text-danger">{transaction.amount}</td>
+                  <td className="text-danger">${transaction.amount}</td>
                   <td></td>
                 </tr>
               </>
@@ -27,14 +36,14 @@ const TransactionTable = ({ transactions }) => {
                 <tr>
                   <td>{transaction.title}</td>
                   <td></td>
-                  <td className="text-danger">{transaction.amount}</td>
+                  <td className="text-danger">${transaction.amount}</td>
                 </tr>
               </>
             );
           })}
         </tbody>
       </Table>
-      <div className="text-end fw-bold">Balance: $10</div>
+      <div className="text-end fw-bold">Balance: ${balance}</div>
     </>
   );
 };
