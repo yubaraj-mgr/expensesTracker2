@@ -11,12 +11,30 @@ export const insertRegistration = async (data) => {
   }
 };
 
-export const checkLoginDetials = async (emalandPasswordinObject) => {
+export const checkLoginDetials = async ({ email, password }) => {
   try {
-    const response = await axios.post(
-      apiE + "/api/v1/login",
-      emalandPasswordinObject
-    );
+    const response = await axios.post(apiE + "/api/v1/login", {
+      email,
+      password,
+    });
+    return response.data;
+  } catch (error) {
+    error && console.log(error);
+  }
+};
+
+export const insertTransaction = async (data) => {
+  try {
+    const response = await axios.post(apiE + "/api/v1/login/dashboard", data);
+    return response.data;
+  } catch (error) {
+    error && console.log(error);
+  }
+};
+
+export const fetchAllTransactions = async () => {
+  try {
+    const response = await axios.get(apiE + "/api/v1/login/dashboard");
     return response.data;
   } catch (error) {
     error && console.log(error);

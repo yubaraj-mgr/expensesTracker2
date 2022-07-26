@@ -1,37 +1,40 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
-const TransactionTable = () => {
+
+const TransactionTable = ({ transactions }) => {
   return (
     <>
-      <Table striped bordered hover>
+      <Table className="mt-4" striped bordered hover>
         <thead>
           <tr>
-            <th>#</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Username</th>
+            <th>Title</th>
+            <th>Income</th>
+            <th>Expenses</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td colSpan={2}>Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
+          {transactions.map((transaction) => {
+            return transaction.type === "income" ? (
+              <>
+                <tr>
+                  <td>{transaction.title}</td>
+                  <td className="text-danger">{transaction.amount}</td>
+                  <td></td>
+                </tr>
+              </>
+            ) : (
+              <>
+                <tr>
+                  <td>{transaction.title}</td>
+                  <td></td>
+                  <td className="text-danger">{transaction.amount}</td>
+                </tr>
+              </>
+            );
+          })}
         </tbody>
       </Table>
+      <div className="text-end fw-bold">Balance: $10</div>
     </>
   );
 };

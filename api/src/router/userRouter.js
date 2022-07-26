@@ -1,4 +1,8 @@
 import express from "express";
+import {
+  fetchAllTransactions,
+  insertTransaction,
+} from "../model/Transaction/TransactionModel.js";
 import { findByEmail, postTaskToServer } from "../model/userModel.js";
 
 const router = express.Router();
@@ -33,6 +37,32 @@ router.post("/login", async (req, res, next) => {
           message: "Please check uername and password",
         });
     console.log(response);
+  } catch (error) {
+    error && console.log(error);
+  }
+});
+
+router.post("/login/dashboard", async (req, res, next) => {
+  try {
+    const response = await insertTransaction(req.body);
+    res.json({
+      status: "success",
+      message: "Transaction Added Successfully",
+      response,
+    });
+  } catch (error) {
+    error && console.log(error);
+  }
+});
+
+router.get("/login/dashboard", async (req, res, next) => {
+  try {
+    const response = await fetchAllTransactions();
+    res.json({
+      status: "success",
+      message: "Transaction Added Successfully",
+      response,
+    });
   } catch (error) {
     error && console.log(error);
   }
