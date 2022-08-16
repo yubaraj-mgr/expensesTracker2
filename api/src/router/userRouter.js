@@ -1,21 +1,72 @@
 import express from "express";
+import { hashPassword } from "../helpers/bcrypt.js";
+import {
+  validateRegistration,
+  validEmailVerify,
+} from "../middleware/joiMiddleWare/joiHandler.js";
 import {
   fetchAllTransactions,
   insertTransaction,
 } from "../model/Transaction/TransactionModel.js";
-import { findByEmail, postTaskToServer } from "../model/userModel.js";
+import {
+  findByEmail,
+  findOneAndUpdate,
+  postTaskToServer,
+} from "../model/userModel.js";
+import { v4 as uuidv4 } from "uuid";
+import { sendEmail, sendEmailVerification } from "../helpers/nodeMailer.js";
 
 const router = express.Router();
 
-router.post("/", async (req, res, next) => {
+router.post("/", validateRegistration, async (req, res, next) => {
   try {
-    const data = req.body;
-    const result = await postTaskToServer(data);
-    res.json({
-      status: "success",
-      message: "user created Successfully",
-      result,
+    req.body.password = hashPassword(req.body.password);
+    req.body.emailCode = uuidv4();
+    console.log(req.body);
+    const result = await postTaskToServer(req.body);
+    if (result?._id) {
+      res.json({
+        status: "success",
+        message: "user created Successfully",
+        result,
+      });
+      const url = `http://localhost:3000/email-verify?e=${result.email}&c=${result.emailCode}`;
+      sendEmail({
+        email: result.email,
+        url,
+      });
+    } else {
+      res.json({
+        status: "error",
+        message: "Please check your details",
+        result,
+      });
+    }
+  } catch (error) {
+    error && console.log(error);
+  }
+});
+
+router.patch("/", validEmailVerify, async (req, res, next) => {
+  try {
+    const result = await findOneAndUpdate(req.body, {
+      status: "active",
+      emailCode: "",
     });
+    if (result?._id) {
+      res.json({
+        status: "success",
+        message: "Your account has been activated",
+      });
+      sendEmailVerification({
+        email: result.email,
+      });
+    } else {
+      res.json({
+        status: "error",
+        message: "Please check your details",
+      });
+    }
   } catch (error) {
     error && console.log(error);
   }

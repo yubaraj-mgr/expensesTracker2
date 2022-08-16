@@ -11,6 +11,15 @@ export const insertRegistration = async (data) => {
   }
 };
 
+export const checkEmailVerification = async (data) => {
+  try {
+    const response = await axios.patch(apiE + "/api/v1", data);
+    return response.data;
+  } catch (error) {
+    error && console.log(error);
+  }
+};
+
 export const checkLoginDetials = async ({ email, password }) => {
   try {
     const response = await axios.post(apiE + "/api/v1/login", {

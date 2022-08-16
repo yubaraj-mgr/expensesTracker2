@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const userSchema = mongoose.Schema({
+  status: {
+    type: String,
+    default: "inactive",
+  },
   firstName: {
     type: String,
     require: true,
@@ -17,6 +21,10 @@ const userSchema = mongoose.Schema({
     type: String,
     require: true,
   },
+  emailCode: {
+    type: String,
+    require: true,
+  },
 });
 
-export default mongoose.model("Usersss", userSchema);
+export default mongoose.model("user", userSchema);

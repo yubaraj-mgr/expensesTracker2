@@ -30,11 +30,11 @@ const Login = () => {
 
   return (
     <MainLayout>
-      <div className="login-page d-flex justify-content-center mt-5">
-        <div className="login-form border p-4 shadow-lg bg-light mt-5">
+      <div className="main mt-5">
+        <div className="fuck">
           <h3>Welcome Back</h3>
           <hr />
-          <Form onSubmit={handleOnSubmit}>
+          <Form onSubmit={handleOnSubmit} className="form">
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
               <Form.Control

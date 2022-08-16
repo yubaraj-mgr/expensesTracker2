@@ -7,3 +7,7 @@ export const postTaskToServer = (data) => {
 export const findByEmail = (email) => {
   return userSchema.findOne(email);
 };
+
+export const findOneAndUpdate = (filter, update) => {
+  return userSchema.findOneAndUpdate(filter, update, { new: true });
+};
